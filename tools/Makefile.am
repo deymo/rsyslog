@@ -35,9 +35,10 @@ rsyslogd_SOURCES = \
 	pidfile.h \
 	\
 	../dirty.h
-rsyslogd_CPPFLAGS =  $(PTHREADS_CFLAGS) $(RSRT_CFLAGS)
+rsyslogd_CPPFLAGS =  $(PTHREADS_CFLAGS) $(RSRT_CFLAGS) -DSD_EXPORT_SYMBOLS
 rsyslogd_LDADD = $(ZLIB_LIBS) $(PTHREADS_LIBS) $(RSRT_LIBS) $(SOL_LIBS)
-rsyslogd_LDFLAGS = -export-dynamic
+rsyslogd_LDFLAGS = -export-dynamic \
+	-Wl,--whole-archive,$(top_builddir)/runtime/.libs/librsyslog.a,--no-whole-archive
 
 if ENABLE_DIAGTOOLS
 sbin_PROGRAMS += rsyslog_diag_hostname msggen zpipe
